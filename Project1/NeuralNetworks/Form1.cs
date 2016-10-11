@@ -100,11 +100,23 @@ namespace NeuralNetworks
         private void computeButton_Click(object sender, EventArgs e)
         {
             BasicNetwork MLP = new BasicNetwork();
+            IActivationFunction af;
 
-            for(int i=0;i<layersList.Items.Count;i++)
+            for (int i=0;i<layersList.Items.Count;i++)
             {
+                
+                if (unipolarRadioButton.Checked)
+                {
+                    af = new ActivationSigmoid();
+                } 
+                else
+                {
+                    af = new ActivationTANH();
+                }
+
+                
                 int neurons = Int32.Parse(layersList.Items[i].ToString());
-                MLP.AddLayer(new BasicLayer(new ActivationBiPolar(), true, neurons));
+                MLP.AddLayer(new BasicLayer(af, biasCheckBox.Checked, neurons));
             }
 
             /*
