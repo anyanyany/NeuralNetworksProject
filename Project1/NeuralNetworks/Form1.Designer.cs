@@ -39,6 +39,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.numberOfNeurons = new System.Windows.Forms.NumericUpDown();
             this.layersList = new System.Windows.Forms.ListBox();
+            this.biasCheckBox = new System.Windows.Forms.CheckBox();
             this.mainPanel.SuspendLayout();
             this.defineLayersPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numberOfNeurons)).BeginInit();
@@ -112,18 +113,20 @@
             this.defineLayersPanel.ColumnCount = 2;
             this.defineLayersPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.defineLayersPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.defineLayersPanel.Controls.Add(this.deleteLayerButton, 0, 4);
-            this.defineLayersPanel.Controls.Add(this.addLayerButton, 0, 2);
+            this.defineLayersPanel.Controls.Add(this.deleteLayerButton, 0, 5);
+            this.defineLayersPanel.Controls.Add(this.addLayerButton, 0, 3);
             this.defineLayersPanel.Controls.Add(this.label2, 0, 1);
             this.defineLayersPanel.Controls.Add(this.label1, 0, 0);
             this.defineLayersPanel.Controls.Add(this.numberOfNeurons, 1, 1);
-            this.defineLayersPanel.Controls.Add(this.layersList, 0, 3);
+            this.defineLayersPanel.Controls.Add(this.layersList, 0, 4);
+            this.defineLayersPanel.Controls.Add(this.biasCheckBox, 0, 2);
             this.defineLayersPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.defineLayersPanel.Location = new System.Drawing.Point(3, 167);
             this.defineLayersPanel.Name = "defineLayersPanel";
-            this.defineLayersPanel.RowCount = 5;
+            this.defineLayersPanel.RowCount = 6;
             this.defineLayersPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
-            this.defineLayersPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.defineLayersPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
+            this.defineLayersPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
             this.defineLayersPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 15F));
             this.defineLayersPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40F));
             this.defineLayersPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 15F));
@@ -137,9 +140,9 @@
             this.deleteLayerButton.FlatAppearance.BorderSize = 2;
             this.deleteLayerButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.deleteLayerButton.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.deleteLayerButton.Location = new System.Drawing.Point(3, 253);
+            this.deleteLayerButton.Location = new System.Drawing.Point(3, 252);
             this.deleteLayerButton.Name = "deleteLayerButton";
-            this.deleteLayerButton.Size = new System.Drawing.Size(344, 39);
+            this.deleteLayerButton.Size = new System.Drawing.Size(344, 40);
             this.deleteLayerButton.TabIndex = 5;
             this.deleteLayerButton.Text = "Delete layer";
             this.deleteLayerButton.UseVisualStyleBackColor = true;
@@ -152,7 +155,7 @@
             this.addLayerButton.FlatAppearance.BorderSize = 2;
             this.addLayerButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.addLayerButton.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.addLayerButton.Location = new System.Drawing.Point(3, 91);
+            this.addLayerButton.Location = new System.Drawing.Point(3, 90);
             this.addLayerButton.Name = "addLayerButton";
             this.addLayerButton.Size = new System.Drawing.Size(344, 38);
             this.addLayerButton.TabIndex = 3;
@@ -167,7 +170,7 @@
             this.label2.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.label2.Location = new System.Drawing.Point(3, 29);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(169, 59);
+            this.label2.Size = new System.Drawing.Size(169, 29);
             this.label2.TabIndex = 1;
             this.label2.Text = "number of neurons:";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -212,10 +215,23 @@
             this.layersList.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.layersList.FormattingEnabled = true;
             this.layersList.ItemHeight = 19;
-            this.layersList.Location = new System.Drawing.Point(3, 135);
+            this.layersList.Location = new System.Drawing.Point(3, 134);
             this.layersList.Name = "layersList";
             this.layersList.Size = new System.Drawing.Size(344, 112);
             this.layersList.TabIndex = 4;
+            // 
+            // biasCheckBox
+            // 
+            this.biasCheckBox.AutoSize = true;
+            this.biasCheckBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.biasCheckBox.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.biasCheckBox.Location = new System.Drawing.Point(10, 61);
+            this.biasCheckBox.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
+            this.biasCheckBox.Name = "biasCheckBox";
+            this.biasCheckBox.Size = new System.Drawing.Size(162, 23);
+            this.biasCheckBox.TabIndex = 7;
+            this.biasCheckBox.Text = "Bias";
+            this.biasCheckBox.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -247,6 +263,7 @@
         private System.Windows.Forms.Button addLayerButton;
         private System.Windows.Forms.ListBox layersList;
         private System.Windows.Forms.Button deleteLayerButton;
+        private System.Windows.Forms.CheckBox biasCheckBox;
     }
 }
 
