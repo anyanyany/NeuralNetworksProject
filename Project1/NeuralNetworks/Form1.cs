@@ -6,6 +6,7 @@ using Encog.ML.Data.Versatile.Normalizers.Strategy;
 using Encog.ML.Data.Versatile.Sources;
 using Encog.Neural.Networks;
 using Encog.Neural.Networks.Layers;
+using Encog.Neural.Networks.Training.Propagation.Back;
 using Encog.Util.CSV;
 using Encog.Util.Simple;
 using System;
@@ -129,6 +130,8 @@ namespace NeuralNetworks
                 wartość współczynnika bezwładności
                 zdefiniowanie rodzaju problemu(klasyfikacja lub regresja) - można zrealizować przez odpowiednie przygotowanie zbioru uczącego i definicję liczby i skali wyjść
             */
+            MLP.Structure.FinalizeStructure();
+            Backpropagation train = new Backpropagation(MLP, trainingSet, (double)learnRate.Value, (double)momentum.Value);
         }
     }
 }

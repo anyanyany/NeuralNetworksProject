@@ -33,6 +33,7 @@
             this.mainPanel = new System.Windows.Forms.TableLayoutPanel();
             this.loadTestSetButton = new System.Windows.Forms.Button();
             this.defineLayersPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.label3 = new System.Windows.Forms.Label();
             this.deleteLayerButton = new System.Windows.Forms.Button();
             this.addLayerButton = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
@@ -40,14 +41,21 @@
             this.numberOfNeurons = new System.Windows.Forms.NumericUpDown();
             this.layersList = new System.Windows.Forms.ListBox();
             this.biasCheckBox = new System.Windows.Forms.CheckBox();
-            this.label3 = new System.Windows.Forms.Label();
             this.activationFunctionPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.unipolarRadioButton = new System.Windows.Forms.RadioButton();
             this.bipolarRadioButton = new System.Windows.Forms.RadioButton();
+            this.unipolarRadioButton = new System.Windows.Forms.RadioButton();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.momentum = new System.Windows.Forms.NumericUpDown();
+            this.learnRate = new System.Windows.Forms.NumericUpDown();
             this.mainPanel.SuspendLayout();
             this.defineLayersPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numberOfNeurons)).BeginInit();
             this.activationFunctionPanel.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.momentum)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.learnRate)).BeginInit();
             this.SuspendLayout();
             // 
             // computeButton
@@ -89,6 +97,7 @@
             this.mainPanel.Controls.Add(this.loadTrainingSetButton, 0, 0);
             this.mainPanel.Controls.Add(this.computeButton, 1, 4);
             this.mainPanel.Controls.Add(this.defineLayersPanel, 0, 2);
+            this.mainPanel.Controls.Add(this.tableLayoutPanel1, 0, 3);
             this.mainPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainPanel.Location = new System.Drawing.Point(0, 0);
             this.mainPanel.Name = "mainPanel";
@@ -144,6 +153,18 @@
             this.defineLayersPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 15F));
             this.defineLayersPanel.Size = new System.Drawing.Size(706, 279);
             this.defineLayersPanel.TabIndex = 3;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label3.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.label3.Location = new System.Drawing.Point(3, 150);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(170, 83);
+            this.label3.TabIndex = 8;
+            this.label3.Text = "activation function:";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // deleteLayerButton
             // 
@@ -244,18 +265,6 @@
             this.biasCheckBox.Text = "Bias";
             this.biasCheckBox.UseVisualStyleBackColor = true;
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label3.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label3.Location = new System.Drawing.Point(3, 150);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(170, 83);
-            this.label3.TabIndex = 8;
-            this.label3.Text = "activation function:";
-            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // activationFunctionPanel
             // 
             this.activationFunctionPanel.ColumnCount = 1;
@@ -270,6 +279,21 @@
             this.activationFunctionPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.activationFunctionPanel.Size = new System.Drawing.Size(170, 77);
             this.activationFunctionPanel.TabIndex = 9;
+            // 
+            // bipolarRadioButton
+            // 
+            this.bipolarRadioButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.bipolarRadioButton.AutoSize = true;
+            this.bipolarRadioButton.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.bipolarRadioButton.Location = new System.Drawing.Point(3, 41);
+            this.bipolarRadioButton.Name = "bipolarRadioButton";
+            this.bipolarRadioButton.Size = new System.Drawing.Size(90, 33);
+            this.bipolarRadioButton.TabIndex = 1;
+            this.bipolarRadioButton.TabStop = true;
+            this.bipolarRadioButton.Text = "Bipolar";
+            this.bipolarRadioButton.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.bipolarRadioButton.UseVisualStyleBackColor = true;
             // 
             // unipolarRadioButton
             // 
@@ -287,20 +311,89 @@
             this.unipolarRadioButton.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.unipolarRadioButton.UseVisualStyleBackColor = true;
             // 
-            // bipolarRadioButton
+            // tableLayoutPanel1
             // 
-            this.bipolarRadioButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.bipolarRadioButton.AutoSize = true;
-            this.bipolarRadioButton.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.bipolarRadioButton.Location = new System.Drawing.Point(3, 41);
-            this.bipolarRadioButton.Name = "bipolarRadioButton";
-            this.bipolarRadioButton.Size = new System.Drawing.Size(90, 33);
-            this.bipolarRadioButton.TabIndex = 1;
-            this.bipolarRadioButton.TabStop = true;
-            this.bipolarRadioButton.Text = "Bipolar";
-            this.bipolarRadioButton.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.bipolarRadioButton.UseVisualStyleBackColor = true;
+            this.tableLayoutPanel1.ColumnCount = 2;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.Controls.Add(this.learnRate, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.momentum, 1, 1);
+            this.tableLayoutPanel1.Controls.Add(this.label5, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.label4, 0, 0);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 386);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 2;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(200, 100);
+            this.tableLayoutPanel1.TabIndex = 4;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label4.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.label4.Location = new System.Drawing.Point(3, 0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(94, 50);
+            this.label4.TabIndex = 2;
+            this.label4.Text = "learn rate:";
+            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label5.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.label5.Location = new System.Drawing.Point(3, 50);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(94, 50);
+            this.label5.TabIndex = 3;
+            this.label5.Text = "momentum:";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // momentum
+            // 
+            this.momentum.DecimalPlaces = 2;
+            this.momentum.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.momentum.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.momentum.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.momentum.Location = new System.Drawing.Point(110, 60);
+            this.momentum.Margin = new System.Windows.Forms.Padding(10);
+            this.momentum.Name = "momentum";
+            this.momentum.Size = new System.Drawing.Size(80, 26);
+            this.momentum.TabIndex = 4;
+            this.momentum.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // learnRate
+            // 
+            this.learnRate.DecimalPlaces = 2;
+            this.learnRate.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.learnRate.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.learnRate.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.learnRate.Location = new System.Drawing.Point(110, 10);
+            this.learnRate.Margin = new System.Windows.Forms.Padding(10);
+            this.learnRate.Name = "learnRate";
+            this.learnRate.Size = new System.Drawing.Size(80, 26);
+            this.learnRate.TabIndex = 5;
+            this.learnRate.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
             // Form1
             // 
@@ -317,6 +410,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.numberOfNeurons)).EndInit();
             this.activationFunctionPanel.ResumeLayout(false);
             this.activationFunctionPanel.PerformLayout();
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.momentum)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.learnRate)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -339,6 +436,11 @@
         private System.Windows.Forms.TableLayoutPanel activationFunctionPanel;
         private System.Windows.Forms.RadioButton bipolarRadioButton;
         private System.Windows.Forms.RadioButton unipolarRadioButton;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.NumericUpDown learnRate;
+        private System.Windows.Forms.NumericUpDown momentum;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label4;
     }
 }
 
