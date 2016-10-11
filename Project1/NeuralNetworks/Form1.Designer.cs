@@ -45,17 +45,20 @@
             this.bipolarRadioButton = new System.Windows.Forms.RadioButton();
             this.unipolarRadioButton = new System.Windows.Forms.RadioButton();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.momentum = new System.Windows.Forms.NumericUpDown();
             this.learnRate = new System.Windows.Forms.NumericUpDown();
+            this.momentum = new System.Windows.Forms.NumericUpDown();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.iterations = new System.Windows.Forms.NumericUpDown();
             this.mainPanel.SuspendLayout();
             this.defineLayersPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numberOfNeurons)).BeginInit();
             this.activationFunctionPanel.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.momentum)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.learnRate)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.momentum)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.iterations)).BeginInit();
             this.SuspendLayout();
             // 
             // computeButton
@@ -316,63 +319,20 @@
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.Controls.Add(this.iterations, 1, 2);
+            this.tableLayoutPanel1.Controls.Add(this.label6, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.learnRate, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.momentum, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.label5, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.label4, 0, 0);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 386);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 2;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.RowCount = 3;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(200, 100);
             this.tableLayoutPanel1.TabIndex = 4;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label4.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label4.Location = new System.Drawing.Point(3, 0);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(94, 50);
-            this.label4.TabIndex = 2;
-            this.label4.Text = "learn rate:";
-            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label5.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label5.Location = new System.Drawing.Point(3, 50);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(94, 50);
-            this.label5.TabIndex = 3;
-            this.label5.Text = "momentum:";
-            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // momentum
-            // 
-            this.momentum.DecimalPlaces = 2;
-            this.momentum.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.momentum.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.momentum.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.momentum.Location = new System.Drawing.Point(110, 60);
-            this.momentum.Margin = new System.Windows.Forms.Padding(10);
-            this.momentum.Name = "momentum";
-            this.momentum.Size = new System.Drawing.Size(80, 26);
-            this.momentum.TabIndex = 4;
-            this.momentum.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
             // 
             // learnRate
             // 
@@ -395,6 +355,83 @@
             0,
             0});
             // 
+            // momentum
+            // 
+            this.momentum.DecimalPlaces = 2;
+            this.momentum.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.momentum.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.momentum.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.momentum.Location = new System.Drawing.Point(110, 43);
+            this.momentum.Margin = new System.Windows.Forms.Padding(10);
+            this.momentum.Name = "momentum";
+            this.momentum.Size = new System.Drawing.Size(80, 26);
+            this.momentum.TabIndex = 4;
+            this.momentum.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label5.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.label5.Location = new System.Drawing.Point(3, 33);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(94, 33);
+            this.label5.TabIndex = 3;
+            this.label5.Text = "momentum:";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label4.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.label4.Location = new System.Drawing.Point(3, 0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(94, 33);
+            this.label4.TabIndex = 2;
+            this.label4.Text = "learn rate:";
+            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label6.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.label6.Location = new System.Drawing.Point(3, 66);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(94, 34);
+            this.label6.TabIndex = 6;
+            this.label6.Text = "iterations:";
+            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // iterations
+            // 
+            this.iterations.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.iterations.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.iterations.Location = new System.Drawing.Point(110, 76);
+            this.iterations.Margin = new System.Windows.Forms.Padding(10);
+            this.iterations.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.iterations.Name = "iterations";
+            this.iterations.Size = new System.Drawing.Size(80, 26);
+            this.iterations.TabIndex = 7;
+            this.iterations.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -412,8 +449,9 @@
             this.activationFunctionPanel.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.momentum)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.learnRate)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.momentum)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.iterations)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -441,6 +479,8 @@
         private System.Windows.Forms.NumericUpDown momentum;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.NumericUpDown iterations;
+        private System.Windows.Forms.Label label6;
     }
 }
 

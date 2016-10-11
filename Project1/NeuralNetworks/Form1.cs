@@ -132,6 +132,12 @@ namespace NeuralNetworks
             */
             MLP.Structure.FinalizeStructure();
             Backpropagation train = new Backpropagation(MLP, trainingSet, (double)learnRate.Value, (double)momentum.Value);
+
+            for(int i=0;i<iterations.Value;i++)
+            {
+                train.Iteration();
+                //MLP = (BasicNetwork)train.GetNetwork();
+            }
         }
     }
 }
