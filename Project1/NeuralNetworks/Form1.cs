@@ -63,15 +63,18 @@ namespace NeuralNetworks
                     ColumnDefinition y = trainingSet.DefineSourceColumn("y", 1, ColumnType.Continuous);
                     ColumnDefinition outputColumn = trainingSet.DefineSourceColumn("cls", 2, ColumnType.Nominal);
                     trainingSet.Analyze();
-                    trainingSet.DefineInput(x);
-                    trainingSet.DefineInput(y);
-                    trainingSet.DefineOutput(outputColumn);
+                    trainingSet.DefineSingleOutputOthersInput(outputColumn);
+                    //trainingSet.DefineInput(x);
+                    //trainingSet.DefineInput(y);
+                    //trainingSet.DefineOutput(outputColumn);
 
                     model = new EncogModel(trainingSet);               
                     model.SelectMethod(trainingSet, MLMethodFactory.TypeFeedforward);
                     trainingSet.Normalize();
                     model.HoldBackValidation(0.3, true, 1001);
                     model.SelectTrainingType(trainingSet);
+
+                    trainingSetLabel.Text = trainingFileName;
                 }
                 catch (FileNotFoundException exception)
                 {
@@ -97,7 +100,8 @@ namespace NeuralNetworks
                 {
                     var format = new CSVFormat('.', ',');
                     testSet = EncogUtility.LoadCSV2Memory(testFileName, 2, 0, true, format, false);
-                   
+
+                    testSetLabel.Text = testFileName;
                 }
                 catch (Exception)
                 {
@@ -122,6 +126,15 @@ namespace NeuralNetworks
 
         private void computeButton_Click(object sender, EventArgs e)
         {
+            if(classificationRadioButton.Checked)
+            {
+                //TODO
+            }
+            else if(regressionRadioButton.Checked)
+            {
+                //TODO
+            }
+
             BasicNetwork MLP = new BasicNetwork();
             IActivationFunction af;
 
@@ -141,18 +154,7 @@ namespace NeuralNetworks
                 int neurons = Int32.Parse(layersList.Items[i].ToString());
                 MLP.AddLayer(new BasicLayer(af, biasCheckBox.Checked, neurons));
             }
-            //EncogModel model = new EncogModel(trainingSet);
-            /*
-            Dla sieci MLP zdefiniowanie
-                liczby warstw, i neuronów ukrytych w każdej warstwie(pełne połączenia pomiędzy warstwami)
-                funkcji aktywacji (unipolarnej lub bipolarnej)
-                obecność biasu
-                liczby iteracji
-                wartości współczynnika nauki
-                wartość współczynnika bezwładności
-                zdefiniowanie rodzaju problemu(klasyfikacja lub regresja) - można zrealizować przez odpowiednie przygotowanie zbioru uczącego i definicję liczby i skali wyjść
-            */
-
+          
             MLP.Structure.FinalizeStructure();   
             MLP.Reset();
 
@@ -172,8 +174,6 @@ namespace NeuralNetworks
                 errors[i] = train.Error;
                 Console.WriteLine($"Error: {i}:  {errors[i]}");
 
-                
-                //MLP = (BasicNetwork)train.GetNetwork();
             }
             train.FinishTraining();
         }
