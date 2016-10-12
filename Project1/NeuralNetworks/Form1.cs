@@ -1,13 +1,17 @@
 ﻿using Encog.Engine.Network.Activation;
 using Encog.ML.Data;
+using Encog.ML.Data.Basic;
 using Encog.ML.Data.Versatile;
 using Encog.ML.Data.Versatile.Columns;
 using Encog.ML.Data.Versatile.Normalizers.Strategy;
 using Encog.ML.Data.Versatile.Sources;
+using Encog.ML.Factory;
 using Encog.ML.Model;
+using Encog.ML.Train;
 using Encog.Neural.Networks;
 using Encog.Neural.Networks.Layers;
 using Encog.Neural.Networks.Training.Propagation.Back;
+using Encog.Neural.Networks.Training.Propagation.Resilient;
 using Encog.Util.CSV;
 using Encog.Util.Simple;
 using System;
@@ -27,7 +31,8 @@ namespace NeuralNetworks
     {
         private string trainingFileName;
         private string testFileName;
-        private IMLDataSet trainingSet;
+        private EncogModel model;
+        private VersatileMLDataSet trainingSet;
         private IMLDataSet testSet;
         public Form1()
         {
@@ -51,11 +56,26 @@ namespace NeuralNetworks
                 try
                 {
                     var format = new CSVFormat('.', ',');
-                    trainingSet = EncogUtility.LoadCSV2Memory(trainingFileName, 2, 1, true, format, false);
+                    // testSet = EncogUtility.LoadCSV2Memory(trainingFileName, 2, 1, true, format, false);
+                    trainingSet = new VersatileMLDataSet(new CSVDataSource(trainingFileName, true,
+                        CSVFormat.DecimalPoint));
+                    ColumnDefinition x = trainingSet.DefineSourceColumn("x", 0, ColumnType.Continuous);
+                    ColumnDefinition y = trainingSet.DefineSourceColumn("y", 1, ColumnType.Continuous);
+                    ColumnDefinition outputColumn = trainingSet.DefineSourceColumn("cls", 2, ColumnType.Nominal);
+                    trainingSet.Analyze();
+                    trainingSet.DefineInput(x);
+                    trainingSet.DefineInput(y);
+                    trainingSet.DefineOutput(outputColumn);
+
+                    model = new EncogModel(trainingSet);               
+                    model.SelectMethod(trainingSet, MLMethodFactory.TypeFeedforward);
+                    trainingSet.Normalize();
+                    model.HoldBackValidation(0.3, true, 1001);
+                    model.SelectTrainingType(trainingSet);
                 }
-                catch (Exception)
+                catch (FileNotFoundException exception)
                 {
-                    MessageBox.Show("Wrong file!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Wrong file!" + exception.Message, "Error: ", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 } 
             }
@@ -133,19 +153,29 @@ namespace NeuralNetworks
                 zdefiniowanie rodzaju problemu(klasyfikacja lub regresja) - można zrealizować przez odpowiednie przygotowanie zbioru uczącego i definicję liczby i skali wyjść
             */
 
-            MLP.Structure.FinalizeStructure();
-            Backpropagation train = new Backpropagation(MLP, trainingSet, (double)learnRate.Value, (double)momentum.Value);
-           
+            MLP.Structure.FinalizeStructure();   
+            MLP.Reset();
+
+            var data = model.TrainingDataset;
+            var datainput = data.Select(x => new double[2] { x.Input[0], x.Input[1]}).ToArray();
+            var dataideal = data.Select(x => new double[1] { x.Ideal[0] }).ToArray();
+
+            IMLDataSet trainingData = new BasicMLDataSet(datainput, dataideal);
+
+            Backpropagation train = new Backpropagation(MLP, trainingData, (double)learnRate.Value, (double)momentum.Value);
+            //IMLTrain train = new ResilientPropagation(MLP, model.Dataset);
+
             double[] errors = new double[(int)iterations.Value];
             for(int i=0;i<iterations.Value;i++)
             {
                 train.Iteration();
                 errors[i] = train.Error;
-                Console.WriteLine("Error: "+i+":  "+errors[i]);
+                Console.WriteLine($"Error: {i}:  {errors[i]}");
 
                 
                 //MLP = (BasicNetwork)train.GetNetwork();
             }
+            train.FinishTraining();
         }
     }
 }
