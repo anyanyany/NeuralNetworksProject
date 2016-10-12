@@ -4,6 +4,7 @@ using Encog.ML.Data.Versatile;
 using Encog.ML.Data.Versatile.Columns;
 using Encog.ML.Data.Versatile.Normalizers.Strategy;
 using Encog.ML.Data.Versatile.Sources;
+using Encog.ML.Model;
 using Encog.Neural.Networks;
 using Encog.Neural.Networks.Layers;
 using Encog.Neural.Networks.Training.Propagation.Back;
@@ -76,6 +77,7 @@ namespace NeuralNetworks
                 {
                     var format = new CSVFormat('.', ',');
                     testSet = EncogUtility.LoadCSV2Memory(testFileName, 2, 0, true, format, false);
+                   
                 }
                 catch (Exception)
                 {
@@ -119,7 +121,7 @@ namespace NeuralNetworks
                 int neurons = Int32.Parse(layersList.Items[i].ToString());
                 MLP.AddLayer(new BasicLayer(af, biasCheckBox.Checked, neurons));
             }
-
+            //EncogModel model = new EncogModel(trainingSet);
             /*
             Dla sieci MLP zdefiniowanie
                 liczby warstw, i neuronów ukrytych w każdej warstwie(pełne połączenia pomiędzy warstwami)
@@ -130,12 +132,18 @@ namespace NeuralNetworks
                 wartość współczynnika bezwładności
                 zdefiniowanie rodzaju problemu(klasyfikacja lub regresja) - można zrealizować przez odpowiednie przygotowanie zbioru uczącego i definicję liczby i skali wyjść
             */
+
             MLP.Structure.FinalizeStructure();
             Backpropagation train = new Backpropagation(MLP, trainingSet, (double)learnRate.Value, (double)momentum.Value);
-
+           
+            double[] errors = new double[(int)iterations.Value];
             for(int i=0;i<iterations.Value;i++)
             {
                 train.Iteration();
+                errors[i] = train.Error;
+                Console.WriteLine("Error: "+i+":  "+errors[i]);
+
+                
                 //MLP = (BasicNetwork)train.GetNetwork();
             }
         }

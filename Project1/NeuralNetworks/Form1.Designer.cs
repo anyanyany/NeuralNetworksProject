@@ -45,20 +45,20 @@
             this.bipolarRadioButton = new System.Windows.Forms.RadioButton();
             this.unipolarRadioButton = new System.Windows.Forms.RadioButton();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.iterations = new System.Windows.Forms.NumericUpDown();
+            this.label6 = new System.Windows.Forms.Label();
             this.learnRate = new System.Windows.Forms.NumericUpDown();
             this.momentum = new System.Windows.Forms.NumericUpDown();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.iterations = new System.Windows.Forms.NumericUpDown();
             this.mainPanel.SuspendLayout();
             this.defineLayersPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numberOfNeurons)).BeginInit();
             this.activationFunctionPanel.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.iterations)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.learnRate)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.momentum)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.iterations)).BeginInit();
             this.SuspendLayout();
             // 
             // computeButton
@@ -334,6 +334,38 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(200, 100);
             this.tableLayoutPanel1.TabIndex = 4;
             // 
+            // iterations
+            // 
+            this.iterations.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.iterations.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.iterations.Location = new System.Drawing.Point(110, 76);
+            this.iterations.Margin = new System.Windows.Forms.Padding(10);
+            this.iterations.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.iterations.Name = "iterations";
+            this.iterations.Size = new System.Drawing.Size(80, 26);
+            this.iterations.TabIndex = 7;
+            this.iterations.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label6.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.label6.Location = new System.Drawing.Point(3, 66);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(94, 34);
+            this.label6.TabIndex = 6;
+            this.label6.Text = "iterations:";
+            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // learnRate
             // 
             this.learnRate.DecimalPlaces = 2;
@@ -400,38 +432,6 @@
             this.label4.Text = "learn rate:";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label6.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label6.Location = new System.Drawing.Point(3, 66);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(94, 34);
-            this.label6.TabIndex = 6;
-            this.label6.Text = "iterations:";
-            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // iterations
-            // 
-            this.iterations.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.iterations.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.iterations.Location = new System.Drawing.Point(110, 76);
-            this.iterations.Margin = new System.Windows.Forms.Padding(10);
-            this.iterations.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.iterations.Name = "iterations";
-            this.iterations.Size = new System.Drawing.Size(80, 26);
-            this.iterations.TabIndex = 7;
-            this.iterations.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -449,9 +449,9 @@
             this.activationFunctionPanel.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.iterations)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.learnRate)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.momentum)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.iterations)).EndInit();
             this.ResumeLayout(false);
 
         }
