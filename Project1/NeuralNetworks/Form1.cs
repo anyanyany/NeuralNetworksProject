@@ -55,18 +55,20 @@ namespace NeuralNetworks
 
                 try
                 {
-                    var format = new CSVFormat('.', ',');
+                    // var format = new CSVFormat('.', ',');
                     // testSet = EncogUtility.LoadCSV2Memory(trainingFileName, 2, 1, true, format, false);
                     trainingSet = new VersatileMLDataSet(new CSVDataSource(trainingFileName, true,
                         CSVFormat.DecimalPoint));
+                    trainingSet.NormHelper.Format = CSVFormat.DecimalPoint;
                     ColumnDefinition x = trainingSet.DefineSourceColumn("x", 0, ColumnType.Continuous);
                     ColumnDefinition y = trainingSet.DefineSourceColumn("y", 1, ColumnType.Continuous);
-                    ColumnDefinition outputColumn = trainingSet.DefineSourceColumn("cls", 2, ColumnType.Nominal);
+                    ColumnDefinition outputColumn = trainingSet.DefineSourceColumn("cls", 2, ColumnType.Continuous);
                     trainingSet.Analyze();
-                    trainingSet.DefineSingleOutputOthersInput(outputColumn);
-                    //trainingSet.DefineInput(x);
-                    //trainingSet.DefineInput(y);
-                    //trainingSet.DefineOutput(outputColumn);
+
+                    //trainingSet.DefineSingleOutputOthersInput(outputColumn);
+                    trainingSet.DefineInput(x);
+                    trainingSet.DefineInput(y);
+                    trainingSet.DefineOutput(outputColumn);
 
                     model = new EncogModel(trainingSet);               
                     model.SelectMethod(trainingSet, MLMethodFactory.TypeFeedforward);
@@ -151,21 +153,23 @@ namespace NeuralNetworks
                 }
 
                 
-                int neurons = Int32.Parse(layersList.Items[i].ToString());
+                int neurons = int.Parse(layersList.Items[i].ToString());
                 MLP.AddLayer(new BasicLayer(af, biasCheckBox.Checked, neurons));
             }
           
             MLP.Structure.FinalizeStructure();   
             MLP.Reset();
 
-            var data = model.TrainingDataset;
+            var data = model.Dataset;
+            //BasicMLDataSet dataSet = new BasicMLDataSet();
+            //foreach (var d in data) dataSet.Add(d);
             var datainput = data.Select(x => new double[2] { x.Input[0], x.Input[1]}).ToArray();
             var dataideal = data.Select(x => new double[1] { x.Ideal[0] }).ToArray();
 
             IMLDataSet trainingData = new BasicMLDataSet(datainput, dataideal);
 
-            Backpropagation train = new Backpropagation(MLP, trainingData, (double)learnRate.Value, (double)momentum.Value);
-            //IMLTrain train = new ResilientPropagation(MLP, model.Dataset);
+           Backpropagation train = new Backpropagation(MLP, trainingData, (double)learnRate.Value, (double)momentum.Value);
+           //IMLTrain train = new ResilientPropagation(MLP, model.Dataset);
 
             double[] errors = new double[(int)iterations.Value];
             for(int i=0;i<iterations.Value;i++)
