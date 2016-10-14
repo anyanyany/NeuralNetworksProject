@@ -32,7 +32,6 @@ namespace NeuralNetworks
         private string trainingFileName;
         private string testFileName;
         private EncogModel model;
-        BasicNetwork MLP;
         private VersatileMLDataSet trainingSet;
         private VersatileMLDataSet testSet;
         public Form1()
@@ -107,10 +106,38 @@ namespace NeuralNetworks
             }
         }
 
+        private BasicNetwork GetNetworkFromFields()
+        {
+            IActivationFunction activationFunction = null;
+            BasicNetwork mlp = new BasicNetwork();
+
+            for (int i = 0; i < layersList.Items.Count; i++)
+            {
+                if (unipolarRadioButton.Checked)
+                    activationFunction = new ActivationSigmoid();
+                else if (bipolarRadioButton.Checked)
+                    activationFunction = new ActivationTANH();
+
+                int neurons = int.Parse(layersList.Items[i].ToString());
+                mlp.AddLayer(new BasicLayer(activationFunction, biasCheckBox.Checked, neurons));
+            }
+
+            mlp.Structure.FinalizeStructure();
+            mlp.Reset();
+
+            return mlp;
+        }
+
         private void computeButton_Click(object sender, EventArgs e)
         {
             IMLDataSet trainingData = null;
-            IActivationFunction af = null;
+
+            if (trainingSet != null)
+            {
+                trainingSet = new VersatileMLDataSet(new CSVDataSource(trainingFileName, true,
+                        CSVFormat.DecimalPoint));
+                trainingSet.NormHelper.Format = CSVFormat.DecimalPoint;
+            }
 
             if (classificationRadioButton.Checked)
             {
@@ -159,66 +186,49 @@ namespace NeuralNetworks
                 trainingData = new BasicMLDataSet(datainput, dataideal);
             }
             
-           
-            MLP = new BasicNetwork();
-            
-            for (int i=0;i<layersList.Items.Count;i++)
-            {            
-                if (unipolarRadioButton.Checked)
-                    af = new ActivationSigmoid();
-                else if (bipolarRadioButton.Checked)
-                    af = new ActivationTANH();
-                
-                int neurons = int.Parse(layersList.Items[i].ToString());
-                MLP.AddLayer(new BasicLayer(af, biasCheckBox.Checked, neurons));
-            }
-          
-            MLP.Structure.FinalizeStructure();   
-            MLP.Reset();
+            BasicNetwork mlp = GetNetworkFromFields();
+            TrainNetwork(mlp, trainingData);
+            TestNetworkUsability(mlp);
+        }
 
-            Backpropagation train = new Backpropagation(MLP, trainingData, (double)learnRate.Value, (double)momentum.Value);
+        private void TrainNetwork(BasicNetwork mlp, IMLDataSet trainingData)
+        {
+            Backpropagation train = new Backpropagation(mlp, trainingData, (double)learnRate.Value, (double)momentum.Value);
+            //ResilientPropagation train = new ResilientPropagation(mlp, model.Dataset);
 
             double[] errors = new double[(int)iterations.Value];
-            for(int i=0;i<iterations.Value;i++)
+            for (int i = 0; i < iterations.Value; i++)
             {
                 train.Iteration();
                 errors[i] = train.Error;
-                Console.WriteLine($"Error: {i+1}:  {errors[i]}");
+                Console.WriteLine($"Error: {i + 1}:  {errors[i]}");
             }
             train.FinishTraining();
+        }
 
+        private void TestNetworkUsability(BasicNetwork mlp)
+        {
             ReadCSV csv = new ReadCSV(trainingFileName, true, CSVFormat.DecimalPoint);
-            String[] line = new String[3];
             NormalizationHelper helper = trainingSet.NormHelper;
             IMLData input = helper.AllocateInputVector();
-            int index = 0;
+
+            int sum = 0, count = 0;
+            int inputVectorLength = csv.ColumnNames.Count - 1;
+            string[] line = new string[inputVectorLength];
 
             while (csv.Next())
             {
-                StringBuilder result = new StringBuilder();
-
-                for (int i = 0; i < line.Length; i++)
-                {
+                for (int i = 0; i < inputVectorLength; i++)
                     line[i] = csv.Get(i);
-                }
-
-                String correct = csv.Get(0);
+                
                 helper.NormalizeInputVector(line, ((BasicMLData)input).Data, true);
-                IMLData output = MLP.Compute(input);
-                index++;
-                String predicted = helper.DenormalizeOutputVectorToString(output)[0];
-                result.Append(line);
-                result.Append(" -> predicted: ");
-                result.Append(predicted);
-                result.Append("(correct: ");
-                result.Append(correct);
-                result.Append(")");
-                Console.WriteLine(result.ToString());
+                IMLData output = mlp.Compute(input);
+                string correct = csv.Get(inputVectorLength);
+                string predicted = helper.DenormalizeOutputVectorToString(output)[0];
+                if (correct.Equals(predicted)) sum++;
+                count++;
             }
-
-
-
-
+            Console.WriteLine($"Got {sum} elements correctly classified out of {count} which is {(float)sum / count}% good");
         }
     }
 }
