@@ -31,7 +31,6 @@
             this.computeButton = new System.Windows.Forms.Button();
             this.loadTrainingSetButton = new System.Windows.Forms.Button();
             this.mainPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.loadTestSetButton = new System.Windows.Forms.Button();
             this.defineLayersPanel = new System.Windows.Forms.TableLayoutPanel();
             this.label3 = new System.Windows.Forms.Label();
             this.deleteLayerButton = new System.Windows.Forms.Button();
@@ -45,6 +44,9 @@
             this.bipolarRadioButton = new System.Windows.Forms.RadioButton();
             this.unipolarRadioButton = new System.Windows.Forms.RadioButton();
             this.parametersPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.regressionRadioButton = new System.Windows.Forms.RadioButton();
+            this.classificationRadioButton = new System.Windows.Forms.RadioButton();
+            this.label7 = new System.Windows.Forms.Label();
             this.iterations = new System.Windows.Forms.NumericUpDown();
             this.label6 = new System.Windows.Forms.Label();
             this.learnRate = new System.Windows.Forms.NumericUpDown();
@@ -52,11 +54,9 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.loadButtonsPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.trainingSetLabel = new System.Windows.Forms.Label();
             this.testSetLabel = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.classificationRadioButton = new System.Windows.Forms.RadioButton();
-            this.regressionRadioButton = new System.Windows.Forms.RadioButton();
+            this.trainingSetLabel = new System.Windows.Forms.Label();
+            this.loadTestSetButton = new System.Windows.Forms.Button();
             this.mainPanel.SuspendLayout();
             this.defineLayersPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numberOfNeurons)).BeginInit();
@@ -118,19 +118,6 @@
             this.mainPanel.Size = new System.Drawing.Size(773, 468);
             this.mainPanel.TabIndex = 2;
             // 
-            // loadTestSetButton
-            // 
-            this.loadTestSetButton.FlatAppearance.BorderSize = 2;
-            this.loadTestSetButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.loadTestSetButton.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.loadTestSetButton.Location = new System.Drawing.Point(79, 46);
-            this.loadTestSetButton.Name = "loadTestSetButton";
-            this.loadTestSetButton.Size = new System.Drawing.Size(224, 38);
-            this.loadTestSetButton.TabIndex = 2;
-            this.loadTestSetButton.Text = "Load test set";
-            this.loadTestSetButton.UseVisualStyleBackColor = true;
-            this.loadTestSetButton.Click += new System.EventHandler(this.loadTestSetButton_Click);
-            // 
             // defineLayersPanel
             // 
             this.defineLayersPanel.BackColor = System.Drawing.SystemColors.Control;
@@ -168,7 +155,7 @@
             this.label3.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.label3.Location = new System.Drawing.Point(3, 150);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(192, 83);
+            this.label3.Size = new System.Drawing.Size(154, 68);
             this.label3.TabIndex = 8;
             this.label3.Text = "activation function:";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -179,9 +166,9 @@
             this.deleteLayerButton.FlatAppearance.BorderSize = 2;
             this.deleteLayerButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.deleteLayerButton.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.deleteLayerButton.Location = new System.Drawing.Point(399, 236);
+            this.deleteLayerButton.Location = new System.Drawing.Point(323, 221);
             this.deleteLayerButton.Name = "deleteLayerButton";
-            this.deleteLayerButton.Size = new System.Drawing.Size(258, 40);
+            this.deleteLayerButton.Size = new System.Drawing.Size(208, 50);
             this.deleteLayerButton.TabIndex = 5;
             this.deleteLayerButton.Text = "Delete layer";
             this.deleteLayerButton.UseVisualStyleBackColor = true;
@@ -194,9 +181,9 @@
             this.addLayerButton.FlatAppearance.BorderSize = 2;
             this.addLayerButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.addLayerButton.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.addLayerButton.Location = new System.Drawing.Point(3, 236);
+            this.addLayerButton.Location = new System.Drawing.Point(3, 221);
             this.addLayerButton.Name = "addLayerButton";
-            this.addLayerButton.Size = new System.Drawing.Size(390, 40);
+            this.addLayerButton.Size = new System.Drawing.Size(314, 50);
             this.addLayerButton.TabIndex = 3;
             this.addLayerButton.Text = "Add layer";
             this.addLayerButton.UseVisualStyleBackColor = true;
@@ -209,7 +196,7 @@
             this.label2.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.label2.Location = new System.Drawing.Point(3, 68);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(192, 41);
+            this.label2.Size = new System.Drawing.Size(154, 41);
             this.label2.TabIndex = 1;
             this.label2.Text = "number of neurons:";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -223,7 +210,7 @@
             this.label1.Font = new System.Drawing.Font("Consolas", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.label1.Location = new System.Drawing.Point(3, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(654, 55);
+            this.label1.Size = new System.Drawing.Size(528, 41);
             this.label1.TabIndex = 0;
             this.label1.Text = "define layers";
             this.label1.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -232,7 +219,7 @@
             // 
             this.numberOfNeurons.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numberOfNeurons.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.numberOfNeurons.Location = new System.Drawing.Point(208, 78);
+            this.numberOfNeurons.Location = new System.Drawing.Point(170, 78);
             this.numberOfNeurons.Margin = new System.Windows.Forms.Padding(10);
             this.numberOfNeurons.Minimum = new decimal(new int[] {
             1,
@@ -240,7 +227,7 @@
             0,
             0});
             this.numberOfNeurons.Name = "numberOfNeurons";
-            this.numberOfNeurons.Size = new System.Drawing.Size(178, 26);
+            this.numberOfNeurons.Size = new System.Drawing.Size(140, 26);
             this.numberOfNeurons.TabIndex = 2;
             this.numberOfNeurons.Value = new decimal(new int[] {
             1,
@@ -254,10 +241,10 @@
             this.layersList.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.layersList.FormattingEnabled = true;
             this.layersList.ItemHeight = 19;
-            this.layersList.Location = new System.Drawing.Point(399, 71);
+            this.layersList.Location = new System.Drawing.Point(323, 71);
             this.layersList.Name = "layersList";
             this.defineLayersPanel.SetRowSpan(this.layersList, 3);
-            this.layersList.Size = new System.Drawing.Size(258, 159);
+            this.layersList.Size = new System.Drawing.Size(208, 144);
             this.layersList.TabIndex = 4;
             // 
             // biasCheckBox
@@ -269,7 +256,7 @@
             this.biasCheckBox.Location = new System.Drawing.Point(25, 112);
             this.biasCheckBox.Margin = new System.Windows.Forms.Padding(25, 3, 3, 3);
             this.biasCheckBox.Name = "biasCheckBox";
-            this.biasCheckBox.Size = new System.Drawing.Size(368, 35);
+            this.biasCheckBox.Size = new System.Drawing.Size(292, 35);
             this.biasCheckBox.TabIndex = 7;
             this.biasCheckBox.Text = "bias";
             this.biasCheckBox.UseVisualStyleBackColor = true;
@@ -281,12 +268,12 @@
             this.activationFunctionPanel.Controls.Add(this.bipolarRadioButton, 0, 1);
             this.activationFunctionPanel.Controls.Add(this.unipolarRadioButton, 0, 0);
             this.activationFunctionPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.activationFunctionPanel.Location = new System.Drawing.Point(201, 153);
+            this.activationFunctionPanel.Location = new System.Drawing.Point(163, 153);
             this.activationFunctionPanel.Name = "activationFunctionPanel";
             this.activationFunctionPanel.RowCount = 2;
             this.activationFunctionPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.activationFunctionPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.activationFunctionPanel.Size = new System.Drawing.Size(192, 77);
+            this.activationFunctionPanel.Size = new System.Drawing.Size(154, 62);
             this.activationFunctionPanel.TabIndex = 9;
             // 
             // bipolarRadioButton
@@ -295,9 +282,9 @@
             | System.Windows.Forms.AnchorStyles.Left)));
             this.bipolarRadioButton.AutoSize = true;
             this.bipolarRadioButton.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.bipolarRadioButton.Location = new System.Drawing.Point(3, 41);
+            this.bipolarRadioButton.Location = new System.Drawing.Point(3, 34);
             this.bipolarRadioButton.Name = "bipolarRadioButton";
-            this.bipolarRadioButton.Size = new System.Drawing.Size(90, 33);
+            this.bipolarRadioButton.Size = new System.Drawing.Size(90, 25);
             this.bipolarRadioButton.TabIndex = 1;
             this.bipolarRadioButton.TabStop = true;
             this.bipolarRadioButton.Text = "bipolar";
@@ -313,7 +300,7 @@
             this.unipolarRadioButton.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.unipolarRadioButton.Location = new System.Drawing.Point(3, 3);
             this.unipolarRadioButton.Name = "unipolarRadioButton";
-            this.unipolarRadioButton.Size = new System.Drawing.Size(99, 32);
+            this.unipolarRadioButton.Size = new System.Drawing.Size(99, 25);
             this.unipolarRadioButton.TabIndex = 0;
             this.unipolarRadioButton.TabStop = true;
             this.unipolarRadioButton.Text = "unipolar";
@@ -349,6 +336,53 @@
             this.parametersPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5F));
             this.parametersPanel.Size = new System.Drawing.Size(227, 274);
             this.parametersPanel.TabIndex = 4;
+            // 
+            // regressionRadioButton
+            // 
+            this.regressionRadioButton.AutoSize = true;
+            this.parametersPanel.SetColumnSpan(this.regressionRadioButton, 2);
+            this.regressionRadioButton.Dock = System.Windows.Forms.DockStyle.Left;
+            this.regressionRadioButton.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.regressionRadioButton.Location = new System.Drawing.Point(10, 226);
+            this.regressionRadioButton.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
+            this.regressionRadioButton.Name = "regressionRadioButton";
+            this.regressionRadioButton.Size = new System.Drawing.Size(117, 29);
+            this.regressionRadioButton.TabIndex = 10;
+            this.regressionRadioButton.TabStop = true;
+            this.regressionRadioButton.Text = "regression";
+            this.regressionRadioButton.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.regressionRadioButton.UseVisualStyleBackColor = true;
+            // 
+            // classificationRadioButton
+            // 
+            this.classificationRadioButton.AutoSize = true;
+            this.classificationRadioButton.Checked = true;
+            this.parametersPanel.SetColumnSpan(this.classificationRadioButton, 2);
+            this.classificationRadioButton.Dock = System.Windows.Forms.DockStyle.Left;
+            this.classificationRadioButton.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.classificationRadioButton.Location = new System.Drawing.Point(10, 199);
+            this.classificationRadioButton.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
+            this.classificationRadioButton.Name = "classificationRadioButton";
+            this.classificationRadioButton.Size = new System.Drawing.Size(153, 21);
+            this.classificationRadioButton.TabIndex = 9;
+            this.classificationRadioButton.TabStop = true;
+            this.classificationRadioButton.Text = "classification";
+            this.classificationRadioButton.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.classificationRadioButton.UseVisualStyleBackColor = true;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.parametersPanel.SetColumnSpan(this.label7, 3);
+            this.label7.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.label7.Font = new System.Drawing.Font("Consolas", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.label7.Location = new System.Drawing.Point(3, 0);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(221, 41);
+            this.label7.TabIndex = 8;
+            this.label7.Text = "and other patameters";
+            this.label7.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             // 
             // iterations
             // 
@@ -484,17 +518,6 @@
             this.loadButtonsPanel.Size = new System.Drawing.Size(767, 87);
             this.loadButtonsPanel.TabIndex = 5;
             // 
-            // trainingSetLabel
-            // 
-            this.trainingSetLabel.AutoSize = true;
-            this.trainingSetLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.trainingSetLabel.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.trainingSetLabel.Location = new System.Drawing.Point(309, 0);
-            this.trainingSetLabel.Name = "trainingSetLabel";
-            this.trainingSetLabel.Size = new System.Drawing.Size(455, 43);
-            this.trainingSetLabel.TabIndex = 3;
-            this.trainingSetLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
             // testSetLabel
             // 
             this.testSetLabel.AutoSize = true;
@@ -506,52 +529,29 @@
             this.testSetLabel.TabIndex = 4;
             this.testSetLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // label7
+            // trainingSetLabel
             // 
-            this.label7.AutoSize = true;
-            this.parametersPanel.SetColumnSpan(this.label7, 3);
-            this.label7.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.label7.Font = new System.Drawing.Font("Consolas", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label7.Location = new System.Drawing.Point(3, 0);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(221, 41);
-            this.label7.TabIndex = 8;
-            this.label7.Text = "and other patameters";
-            this.label7.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.trainingSetLabel.AutoSize = true;
+            this.trainingSetLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.trainingSetLabel.Font = new System.Drawing.Font("Consolas", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.trainingSetLabel.Location = new System.Drawing.Point(309, 0);
+            this.trainingSetLabel.Name = "trainingSetLabel";
+            this.trainingSetLabel.Size = new System.Drawing.Size(455, 43);
+            this.trainingSetLabel.TabIndex = 3;
+            this.trainingSetLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // classificationRadioButton
+            // loadTestSetButton
             // 
-            this.classificationRadioButton.AutoSize = true;
-            this.classificationRadioButton.Checked = true;
-            this.parametersPanel.SetColumnSpan(this.classificationRadioButton, 2);
-            this.classificationRadioButton.Dock = System.Windows.Forms.DockStyle.Left;
-            this.classificationRadioButton.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.classificationRadioButton.Location = new System.Drawing.Point(10, 199);
-            this.classificationRadioButton.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
-            this.classificationRadioButton.Name = "classificationRadioButton";
-            this.classificationRadioButton.Size = new System.Drawing.Size(153, 21);
-            this.classificationRadioButton.TabIndex = 9;
-            this.classificationRadioButton.TabStop = true;
-            this.classificationRadioButton.Text = "classification";
-            this.classificationRadioButton.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-            this.classificationRadioButton.UseVisualStyleBackColor = true;
-            // 
-            // regressionRadioButton
-            // 
-            this.regressionRadioButton.AutoSize = true;
-            this.parametersPanel.SetColumnSpan(this.regressionRadioButton, 2);
-            this.regressionRadioButton.Dock = System.Windows.Forms.DockStyle.Left;
-            this.regressionRadioButton.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.regressionRadioButton.Location = new System.Drawing.Point(10, 226);
-            this.regressionRadioButton.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
-            this.regressionRadioButton.Name = "regressionRadioButton";
-            this.regressionRadioButton.Size = new System.Drawing.Size(117, 29);
-            this.regressionRadioButton.TabIndex = 10;
-            this.regressionRadioButton.TabStop = true;
-            this.regressionRadioButton.Text = "regression";
-            this.regressionRadioButton.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.regressionRadioButton.UseVisualStyleBackColor = true;
+            this.loadTestSetButton.FlatAppearance.BorderSize = 2;
+            this.loadTestSetButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.loadTestSetButton.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.loadTestSetButton.Location = new System.Drawing.Point(79, 46);
+            this.loadTestSetButton.Name = "loadTestSetButton";
+            this.loadTestSetButton.Size = new System.Drawing.Size(224, 38);
+            this.loadTestSetButton.TabIndex = 2;
+            this.loadTestSetButton.Text = "Load test set";
+            this.loadTestSetButton.UseVisualStyleBackColor = true;
+            this.loadTestSetButton.Click += new System.EventHandler(this.loadTestSetButton_Click);
             // 
             // Form1
             // 

@@ -32,14 +32,13 @@ namespace NeuralNetworks
         private string trainingFileName;
         private string testFileName;
         private EncogModel model;
+        BasicNetwork MLP;
         private VersatileMLDataSet trainingSet;
-        private IMLDataSet testSet;
+        private VersatileMLDataSet testSet;
         public Form1()
         {
             InitializeComponent();
         }
-
-
 
         private void loadTrainingSetButton_Click(object sender, EventArgs e)
         {
@@ -55,28 +54,10 @@ namespace NeuralNetworks
 
                 try
                 {
-                    // var format = new CSVFormat('.', ',');
-                    // testSet = EncogUtility.LoadCSV2Memory(trainingFileName, 2, 1, true, format, false);
                     trainingSet = new VersatileMLDataSet(new CSVDataSource(trainingFileName, true,
                         CSVFormat.DecimalPoint));
                     trainingSet.NormHelper.Format = CSVFormat.DecimalPoint;
-                    ColumnDefinition x = trainingSet.DefineSourceColumn("x", 0, ColumnType.Continuous);
-                    ColumnDefinition y = trainingSet.DefineSourceColumn("y", 1, ColumnType.Continuous);
-                    ColumnDefinition outputColumn = trainingSet.DefineSourceColumn("cls", 2, ColumnType.Continuous);
-                    trainingSet.Analyze();
-
-                    //trainingSet.DefineSingleOutputOthersInput(outputColumn);
-                    trainingSet.DefineInput(x);
-                    trainingSet.DefineInput(y);
-                    trainingSet.DefineOutput(outputColumn);
-
-                    model = new EncogModel(trainingSet);               
-                    model.SelectMethod(trainingSet, MLMethodFactory.TypeFeedforward);
-                    trainingSet.Normalize();
-                    model.HoldBackValidation(0.3, true, 1001);
-                    model.SelectTrainingType(trainingSet);
-
-                    trainingSetLabel.Text = trainingFileName;
+                    trainingSetLabel.Text = trainingFileName;  
                 }
                 catch (FileNotFoundException exception)
                 {
@@ -101,8 +82,8 @@ namespace NeuralNetworks
                 try
                 {
                     var format = new CSVFormat('.', ',');
-                    testSet = EncogUtility.LoadCSV2Memory(testFileName, 2, 0, true, format, false);
-
+                    testSet = new VersatileMLDataSet(new CSVDataSource(testFileName, true,
+                        CSVFormat.DecimalPoint));
                     testSetLabel.Text = testFileName;
                 }
                 catch (Exception)
@@ -128,30 +109,63 @@ namespace NeuralNetworks
 
         private void computeButton_Click(object sender, EventArgs e)
         {
-            if(classificationRadioButton.Checked)
+            IMLDataSet trainingData = null;
+            IActivationFunction af = null;
+
+            if (classificationRadioButton.Checked)
             {
-                //TODO
+                ColumnDefinition x = trainingSet.DefineSourceColumn("x", 0, ColumnType.Continuous);
+                ColumnDefinition y = trainingSet.DefineSourceColumn("y", 1, ColumnType.Continuous);
+                ColumnDefinition cls = trainingSet.DefineSourceColumn("cls", 2, ColumnType.Continuous); //?????
+                trainingSet.Analyze();
+                trainingSet.DefineSingleOutputOthersInput(cls);
+                //trainingSet.DefineInput(x);
+                //trainingSet.DefineInput(y);
+                //trainingSet.DefineOutput(outputColumn);
+
+                model = new EncogModel(trainingSet);
+                model.SelectMethod(trainingSet, MLMethodFactory.TypeFeedforward);
+                trainingSet.Normalize();
+                model.HoldBackValidation(0.3, true, 1001);
+                model.SelectTrainingType(trainingSet);
+
+                var data = model.Dataset;
+                var datainput = data.Select(v => new double[2] { v.Input[0], v.Input[1] }).ToArray();
+                var dataideal = data.Select(v => new double[1] { v.Ideal[0] }).ToArray();
+
+                trainingData = new BasicMLDataSet(datainput, dataideal);
+
+
             }
             else if(regressionRadioButton.Checked)
             {
-                //TODO
+                ColumnDefinition x = trainingSet.DefineSourceColumn("x", 0, ColumnType.Continuous);
+                ColumnDefinition y = trainingSet.DefineSourceColumn("y", 1, ColumnType.Continuous);
+                trainingSet.Analyze();
+                trainingSet.DefineSingleOutputOthersInput(y);
+
+                model = new EncogModel(trainingSet);
+                model.SelectMethod(trainingSet, MLMethodFactory.TypeFeedforward);
+                trainingSet.Normalize();
+                model.HoldBackValidation(0.3, true, 1001);
+                model.SelectTrainingType(trainingSet);
+
+                var data = model.Dataset;
+                var datainput = data.Select(v => new double[2] { v.Input[0], v.Input[1] }).ToArray();
+                var dataideal = data.Select(v => new double[1] { v.Ideal[0] }).ToArray();
+
+                trainingData = new BasicMLDataSet(datainput, dataideal);
             }
-
-            BasicNetwork MLP = new BasicNetwork();
-            IActivationFunction af;
-
+            
+           
+            MLP = new BasicNetwork();
+            
             for (int i=0;i<layersList.Items.Count;i++)
-            {
-                
+            {            
                 if (unipolarRadioButton.Checked)
-                {
                     af = new ActivationSigmoid();
-                } 
-                else
-                {
+                else if (bipolarRadioButton.Checked)
                     af = new ActivationTANH();
-                }
-
                 
                 int neurons = int.Parse(layersList.Items[i].ToString());
                 MLP.AddLayer(new BasicLayer(af, biasCheckBox.Checked, neurons));
@@ -160,15 +174,7 @@ namespace NeuralNetworks
             MLP.Structure.FinalizeStructure();   
             MLP.Reset();
 
-            var data = model.Dataset;
-            //BasicMLDataSet dataSet = new BasicMLDataSet();
-            //foreach (var d in data) dataSet.Add(d);
-            var datainput = data.Select(x => new double[2] { x.Input[0], x.Input[1]}).ToArray();
-            var dataideal = data.Select(x => new double[1] { x.Ideal[0] }).ToArray();
-
-            IMLDataSet trainingData = new BasicMLDataSet(datainput, dataideal);
-
-           Backpropagation train = new Backpropagation(MLP, trainingData, (double)learnRate.Value, (double)momentum.Value);
+            Backpropagation train = new Backpropagation(MLP, trainingData, (double)learnRate.Value, (double)momentum.Value);
            //IMLTrain train = new ResilientPropagation(MLP, model.Dataset);
 
             double[] errors = new double[(int)iterations.Value];
@@ -176,8 +182,7 @@ namespace NeuralNetworks
             {
                 train.Iteration();
                 errors[i] = train.Error;
-                Console.WriteLine($"Error: {i}:  {errors[i]}");
-
+                Console.WriteLine($"Error: {i+1}:  {errors[i]}");
             }
             train.FinishTraining();
         }
