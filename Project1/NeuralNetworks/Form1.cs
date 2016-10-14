@@ -116,7 +116,8 @@ namespace NeuralNetworks
             {
                 ColumnDefinition x = trainingSet.DefineSourceColumn("x", 0, ColumnType.Continuous);
                 ColumnDefinition y = trainingSet.DefineSourceColumn("y", 1, ColumnType.Continuous);
-                ColumnDefinition cls = trainingSet.DefineSourceColumn("cls", 2, ColumnType.Continuous); //?????
+                ColumnDefinition cls = trainingSet.DefineSourceColumn("cls", 2, ColumnType.Ordinal); //?????
+                cls.DefineClass(new string[] {"1","2","3"});
                 trainingSet.Analyze();
                 trainingSet.DefineSingleOutputOthersInput(cls);
                 //trainingSet.DefineInput(x);
