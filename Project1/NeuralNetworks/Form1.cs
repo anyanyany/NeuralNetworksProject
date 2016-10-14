@@ -150,6 +150,7 @@ namespace NeuralNetworks
                 trainingSet.Normalize();
                 model.HoldBackValidation(0.3, true, 1001);
                 model.SelectTrainingType(trainingSet);
+               // var bestMethod = (IMLRegression)model.C r o s s v ali d a t e (5 , true ) ;
 
                 var data = model.Dataset;
                 var datainput = data.Select(v => new double[2] { v.Input[0], v.Input[1] }).ToArray();
@@ -176,7 +177,6 @@ namespace NeuralNetworks
             MLP.Reset();
 
             Backpropagation train = new Backpropagation(MLP, trainingData, (double)learnRate.Value, (double)momentum.Value);
-           //IMLTrain train = new ResilientPropagation(MLP, model.Dataset);
 
             double[] errors = new double[(int)iterations.Value];
             for(int i=0;i<iterations.Value;i++)
@@ -186,6 +186,39 @@ namespace NeuralNetworks
                 Console.WriteLine($"Error: {i+1}:  {errors[i]}");
             }
             train.FinishTraining();
+
+            ReadCSV csv = new ReadCSV(trainingFileName, true, CSVFormat.DecimalPoint);
+            String[] line = new String[3];
+            NormalizationHelper helper = trainingSet.NormHelper;
+            IMLData input = helper.AllocateInputVector();
+            int index = 0;
+
+            while (csv.Next())
+            {
+                StringBuilder result = new StringBuilder();
+
+                for (int i = 0; i < line.Length; i++)
+                {
+                    line[i] = csv.Get(i);
+                }
+
+                String correct = csv.Get(0);
+                helper.NormalizeInputVector(line, ((BasicMLData)input).Data, true);
+                IMLData output = MLP.Compute(input);
+                index++;
+                String predicted = helper.DenormalizeOutputVectorToString(output)[0];
+                result.Append(line);
+                result.Append(" -> predicted: ");
+                result.Append(predicted);
+                result.Append("(correct: ");
+                result.Append(correct);
+                result.Append(")");
+                Console.WriteLine(result.ToString());
+            }
+
+
+
+
         }
     }
 }
