@@ -143,13 +143,13 @@ namespace NeuralNetworks
             {
                 ColumnDefinition x = trainingSet.DefineSourceColumn("x", 0, ColumnType.Continuous);
                 ColumnDefinition y = trainingSet.DefineSourceColumn("y", 1, ColumnType.Continuous);
-                ColumnDefinition cls = trainingSet.DefineSourceColumn("cls", 2, ColumnType.Ordinal); //?????
+                ColumnDefinition cls = trainingSet.DefineSourceColumn("cls", 2, ColumnType.Continuous); //?????
                 cls.DefineClass(new string[] {"1","2","3"});
                 trainingSet.Analyze();
                 trainingSet.DefineSingleOutputOthersInput(cls);
                 //trainingSet.DefineInput(x);
                 //trainingSet.DefineInput(y);
-                //trainingSet.DefineOutput(outputColumn);
+                //trainingSet.DefineOutput(cls);
 
                 model = new EncogModel(trainingSet);
                 model.SelectMethod(trainingSet, MLMethodFactory.TypeFeedforward);
@@ -193,8 +193,8 @@ namespace NeuralNetworks
 
         private void TrainNetwork(BasicNetwork mlp, IMLDataSet trainingData)
         {
-            Backpropagation train = new Backpropagation(mlp, trainingData, (double)learnRate.Value, (double)momentum.Value);
-            //ResilientPropagation train = new ResilientPropagation(mlp, model.Dataset);
+            //Backpropagation train = new Backpropagation(mlp, trainingData, (double)learnRate.Value, (double)momentum.Value);
+            ResilientPropagation train = new ResilientPropagation(mlp, trainingData, (double)learnRate.Value, (double)momentum.Value);
 
             double[] errors = new double[(int)iterations.Value];
             for (int i = 0; i < iterations.Value; i++)
@@ -223,12 +223,14 @@ namespace NeuralNetworks
                 
                 helper.NormalizeInputVector(line, ((BasicMLData)input).Data, true);
                 IMLData output = mlp.Compute(input);
+                double predictedValue = Double.Parse(helper.DenormalizeOutputVectorToString(output)[0]);
                 string correct = csv.Get(inputVectorLength);
-                string predicted = helper.DenormalizeOutputVectorToString(output)[0];
+                string predicted = Math.Round(predictedValue, 0).ToString();
+                // Console.WriteLine($"Got output: {predicted} while correct is {correct}");
                 if (correct.Equals(predicted)) sum++;
                 count++;
             }
-            Console.WriteLine($"Got {sum} elements correctly classified out of {count} which is {(float)sum / count}% good");
+            Console.WriteLine($"Got {sum} elements correctly classified out of {count} which is {(float)sum * 100 / count}% good");
         }
     }
 }
