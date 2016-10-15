@@ -1,4 +1,5 @@
 ﻿using Encog.Engine.Network.Activation;
+using Encog.ML;
 using Encog.ML.Data;
 using Encog.ML.Data.Basic;
 using Encog.ML.Data.Versatile;
@@ -162,33 +163,31 @@ namespace NeuralNetworks
                 var dataideal = data.Select(v => new double[3] { v.Ideal[0], v.Ideal[1], v.Ideal[2] }).ToArray();
 
                 trainingData = new BasicMLDataSet(datainput, dataideal);
-
+                
+                BasicNetwork mlp = GetNetworkFromFields();
+                TrainNetwork(mlp, trainingData);
+                TestNetworkUsability(mlp);
 
             }
             else if(regressionRadioButton.Checked)
             {
                 ColumnDefinition x = trainingSet.DefineSourceColumn("x", 0, ColumnType.Continuous);
                 ColumnDefinition y = trainingSet.DefineSourceColumn("y", 1, ColumnType.Continuous);
+                ColumnDefinition cls = trainingSet.DefineSourceColumn("cls", 2, ColumnType.Nominal);
+                cls.DefineClass(new string[] { "1", "2", "3" });
                 trainingSet.Analyze();
-                trainingSet.DefineSingleOutputOthersInput(y);
+                trainingSet.DefineSingleOutputOthersInput(cls);
 
                 model = new EncogModel(trainingSet);
                 model.SelectMethod(trainingSet, MLMethodFactory.TypeFeedforward);
                 trainingSet.Normalize();
                 model.HoldBackValidation(0.3, true, 1001);
                 model.SelectTrainingType(trainingSet);
-               // var bestMethod = (IMLRegression)model.C r o s s v ali d a t e (5 , true ) ;
-
-                var data = model.Dataset;
-                var datainput = data.Select(v => new double[2] { v.Input[0], v.Input[1] }).ToArray();
-                var dataideal = data.Select(v => new double[3] { v.Ideal[0], v.Ideal[1], v.Ideal[2] }).ToArray();
-
-                trainingData = new BasicMLDataSet(datainput, dataideal);
+                IMLRegression bestMethod = (IMLRegression)model.Crossvalidate(5, true);
+                Console.WriteLine($"Regression training error: {model.CalculateError(bestMethod, model.TrainingDataset)}");
+                Console.WriteLine($"Regression validation error: {model.CalculateError(bestMethod, model.ValidationDataset)}");
+                TestNetworkUsability(bestMethod);
             }
-            
-            BasicNetwork mlp = GetNetworkFromFields();
-            TrainNetwork(mlp, trainingData);
-            TestNetworkUsability(mlp);
         }
 
         private void TrainNetwork(BasicNetwork mlp, IMLDataSet trainingData)
@@ -203,10 +202,11 @@ namespace NeuralNetworks
                 errors[i] = train.Error;
                 //Console.WriteLine($"Error: {i + 1}:  {errors[i]}");
             }
+            Console.WriteLine($"Classification training error: {errors[errors.Length-1]}");
             train.FinishTraining();
         }
 
-        private void TestNetworkUsability(BasicNetwork mlp)
+        private void TestNetworkUsability(IMLRegression mlp)
         {
             ReadCSV csv = new ReadCSV(trainingFileName, true, CSVFormat.DecimalPoint);
             NormalizationHelper helper = trainingSet.NormHelper;
