@@ -143,7 +143,7 @@ namespace NeuralNetworks
             {
                 ColumnDefinition x = trainingSet.DefineSourceColumn("x", 0, ColumnType.Continuous);
                 ColumnDefinition y = trainingSet.DefineSourceColumn("y", 1, ColumnType.Continuous);
-                ColumnDefinition cls = trainingSet.DefineSourceColumn("cls", 2, ColumnType.Continuous); //?????
+                ColumnDefinition cls = trainingSet.DefineSourceColumn("cls", 2, ColumnType.Nominal);
                 cls.DefineClass(new string[] {"1","2","3"});
                 trainingSet.Analyze();
                 trainingSet.DefineSingleOutputOthersInput(cls);
@@ -159,7 +159,7 @@ namespace NeuralNetworks
 
                 var data = model.Dataset;
                 var datainput = data.Select(v => new double[2] { v.Input[0], v.Input[1] }).ToArray();
-                var dataideal = data.Select(v => new double[1] { v.Ideal[0] }).ToArray();
+                var dataideal = data.Select(v => new double[3] { v.Ideal[0], v.Ideal[1], v.Ideal[2] }).ToArray();
 
                 trainingData = new BasicMLDataSet(datainput, dataideal);
 
@@ -181,7 +181,7 @@ namespace NeuralNetworks
 
                 var data = model.Dataset;
                 var datainput = data.Select(v => new double[2] { v.Input[0], v.Input[1] }).ToArray();
-                var dataideal = data.Select(v => new double[1] { v.Ideal[0] }).ToArray();
+                var dataideal = data.Select(v => new double[3] { v.Ideal[0], v.Ideal[1], v.Ideal[2] }).ToArray();
 
                 trainingData = new BasicMLDataSet(datainput, dataideal);
             }
@@ -201,7 +201,7 @@ namespace NeuralNetworks
             {
                 train.Iteration();
                 errors[i] = train.Error;
-                Console.WriteLine($"Error: {i + 1}:  {errors[i]}");
+                //Console.WriteLine($"Error: {i + 1}:  {errors[i]}");
             }
             train.FinishTraining();
         }
@@ -223,10 +223,11 @@ namespace NeuralNetworks
                 
                 helper.NormalizeInputVector(line, ((BasicMLData)input).Data, true);
                 IMLData output = mlp.Compute(input);
-                double predictedValue = Double.Parse(helper.DenormalizeOutputVectorToString(output)[0]);
+                var tmp = helper.DenormalizeOutputVectorToString(output);
+                double predictedValue = double.Parse(helper.DenormalizeOutputVectorToString(output)[0]);
                 string correct = csv.Get(inputVectorLength);
                 string predicted = Math.Round(predictedValue, 0).ToString();
-                // Console.WriteLine($"Got output: {predicted} while correct is {correct}");
+                // Console.WriteLine($"Got output: {predictedValue} while correct is {correct}");
                 if (correct.Equals(predicted)) sum++;
                 count++;
             }
