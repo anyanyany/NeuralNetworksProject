@@ -35,9 +35,11 @@ namespace NeuralNetworks
         private EncogModel model;
         private VersatileMLDataSet trainingSet;
         private VersatileMLDataSet testSet;
+        private List<BasicLayer> networkLayers;
         public Form1()
         {
             InitializeComponent();
+            networkLayers = new List<BasicLayer>();
         }
 
         private void loadTrainingSetButton_Click(object sender, EventArgs e)
@@ -81,7 +83,6 @@ namespace NeuralNetworks
 
                 try
                 {
-                    var format = new CSVFormat('.', ',');
                     testSet = new VersatileMLDataSet(new CSVDataSource(testFileName, true,
                         CSVFormat.DecimalPoint));
                     testSetLabel.Text = testFileName;
@@ -96,36 +97,35 @@ namespace NeuralNetworks
 
         private void addLayerButton_Click(object sender, EventArgs e)
         {
-            layersList.Items.Add(numberOfNeurons.Value);
+            IActivationFunction activationFunction = null;
+            layersList.Items.Add(numberOfNeurons.Value+", "+biasCheckBox.Checked+", "+(unipolarRadioButton.Checked?"unipolar":"bipolar"));
+
+            if (unipolarRadioButton.Checked)
+                activationFunction = new ActivationSigmoid();
+            else if (bipolarRadioButton.Checked)
+                activationFunction = new ActivationTANH();
+            networkLayers.Add(new BasicLayer(activationFunction, biasCheckBox.Checked, (int)numberOfNeurons.Value));
         }
 
         private void deleteLayerButton_Click(object sender, EventArgs e)
         {
-            if (layersList.SelectedIndex >= 0)
+            int index = layersList.SelectedIndex;
+            if (index >= 0)
             {
-                layersList.Items.RemoveAt(layersList.SelectedIndex);
+                layersList.Items.RemoveAt(index);
+                networkLayers.RemoveAt(index);
             }
         }
 
         private BasicNetwork GetNetworkFromFields()
         {
-            IActivationFunction activationFunction = null;
             BasicNetwork mlp = new BasicNetwork();
-
-            for (int i = 0; i < layersList.Items.Count; i++)
-            {
-                if (unipolarRadioButton.Checked)
-                    activationFunction = new ActivationSigmoid();
-                else if (bipolarRadioButton.Checked)
-                    activationFunction = new ActivationTANH();
-
-                int neurons = int.Parse(layersList.Items[i].ToString());
-                mlp.AddLayer(new BasicLayer(activationFunction, biasCheckBox.Checked, neurons));
+            for (int i = 0; i < networkLayers.Count; i++)
+            {              
+                mlp.AddLayer(networkLayers[i]);
             }
-
             mlp.Structure.FinalizeStructure();
             mlp.Reset();
-
             return mlp;
         }
 
@@ -148,9 +148,6 @@ namespace NeuralNetworks
                 cls.DefineClass(new string[] {"1","2","3"});
                 trainingSet.Analyze();
                 trainingSet.DefineSingleOutputOthersInput(cls);
-                //trainingSet.DefineInput(x);
-                //trainingSet.DefineInput(y);
-                //trainingSet.DefineOutput(cls);
 
                 model = new EncogModel(trainingSet);
                 model.SelectMethod(trainingSet, MLMethodFactory.TypeFeedforward);
@@ -173,25 +170,37 @@ namespace NeuralNetworks
             {
                 ColumnDefinition x = trainingSet.DefineSourceColumn("x", 0, ColumnType.Continuous);
                 ColumnDefinition y = trainingSet.DefineSourceColumn("y", 1, ColumnType.Continuous);
-                ColumnDefinition cls = trainingSet.DefineSourceColumn("cls", 2, ColumnType.Nominal);
-                cls.DefineClass(new string[] { "1", "2", "3" });
                 trainingSet.Analyze();
-                trainingSet.DefineSingleOutputOthersInput(cls);
+                trainingSet.DefineSingleOutputOthersInput(y);
 
                 model = new EncogModel(trainingSet);
                 model.SelectMethod(trainingSet, MLMethodFactory.TypeFeedforward);
                 trainingSet.Normalize();
                 model.HoldBackValidation(0.3, true, 1001);
                 model.SelectTrainingType(trainingSet);
-                IMLRegression bestMethod = (IMLRegression)model.Crossvalidate(5, true);
+
+                var data = model.Dataset;
+                var datainput = data.Select(v => new double[1] { v.Input[0] }).ToArray();
+                var dataideal = data.Select(v => new double[1] { v.Ideal[0] }).ToArray();
+
+                trainingData = new BasicMLDataSet(datainput, dataideal);
+
+                BasicNetwork mlp = GetNetworkFromFields();
+                TrainNetwork(mlp, trainingData);
+                TestNetworkUsability(mlp);
+
+
+                /*IMLRegression bestMethod = (IMLRegression)model.Crossvalidate(5, true);
                 Console.WriteLine($"Regression training error: {model.CalculateError(bestMethod, model.TrainingDataset)}");
                 Console.WriteLine($"Regression validation error: {model.CalculateError(bestMethod, model.ValidationDataset)}");
-                TestNetworkUsability(bestMethod);
+                TestNetworkUsability(bestMethod);*/
             }
         }
 
         private void TrainNetwork(BasicNetwork mlp, IMLDataSet trainingData)
         {
+            var csv = new StringBuilder();
+
             //Backpropagation train = new Backpropagation(mlp, trainingData, (double)learnRate.Value, (double)momentum.Value);
             ResilientPropagation train = new ResilientPropagation(mlp, trainingData, (double)learnRate.Value, (double)momentum.Value);
 
@@ -200,10 +209,14 @@ namespace NeuralNetworks
             {
                 train.Iteration();
                 errors[i] = train.Error;
-                //Console.WriteLine($"Error: {i + 1}:  {errors[i]}");
+                Console.WriteLine($"Error: {i + 1}:  {errors[i]}");
+
+                var newLine = string.Format("{0},{1}", i+1, errors[i].ToString().Replace(',','.'));
+                csv.AppendLine(newLine);
             }
-            Console.WriteLine($"Classification training error: {errors[errors.Length-1]}");
+            Console.WriteLine($"Training error: {errors[errors.Length-1]}");
             train.FinishTraining();
+            File.WriteAllText(System.IO.Directory.GetCurrentDirectory()+"\\TrainingErrors.csv", csv.ToString());
         }
 
         private void TestNetworkUsability(IMLRegression mlp)
@@ -227,7 +240,7 @@ namespace NeuralNetworks
                 double predictedValue = double.Parse(helper.DenormalizeOutputVectorToString(output)[0]);
                 string correct = csv.Get(inputVectorLength);
                 string predicted = Math.Round(predictedValue, 0).ToString();
-                // Console.WriteLine($"Got output: {predictedValue} while correct is {correct}");
+                Console.WriteLine($"Got output: {predictedValue} while correct is {correct}");
                 if (correct.Equals(predicted)) sum++;
                 count++;
             }
