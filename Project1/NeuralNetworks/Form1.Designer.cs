@@ -391,7 +391,7 @@
             this.iterations.Location = new System.Drawing.Point(123, 152);
             this.iterations.Margin = new System.Windows.Forms.Padding(10);
             this.iterations.Maximum = new decimal(new int[] {
-            10000,
+            100000000,
             0,
             0,
             0});
