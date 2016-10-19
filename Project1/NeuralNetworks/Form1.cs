@@ -217,6 +217,12 @@ namespace NeuralNetworks
 
         private void TestNetworkUsability(IMLRegression mlp)
         {
+            var outputCsv = new StringBuilder();
+            if (classificationRadioButton.Checked)
+                outputCsv.AppendLine("x,y,cls");
+            else if (regressionRadioButton.Checked)
+                outputCsv.AppendLine("x,y");
+            string newLine=null;
             ReadCSV csv = new ReadCSV(trainingFileName, true, CSVFormat.DecimalPoint);
             NormalizationHelper helper = trainingSet.NormHelper;
             IMLData input = helper.AllocateInputVector();
@@ -238,8 +244,21 @@ namespace NeuralNetworks
                 Console.WriteLine($"Got output: {predictedValue} while correct is {correct}");
                 if (correct.Equals(predicted)) sum++;
                 count++;
+                if (classificationRadioButton.Checked)
+                    newLine = string.Format("{0},{1},{2}", csv.Get(0).ToString().Replace(',', '.'), csv.Get(1).ToString().Replace(',', '.'), predicted);
+                else if(regressionRadioButton.Checked)
+                    newLine = string.Format("{0},{1}", csv.Get(0).ToString().Replace(',', '.'), predictedValue.ToString().Replace(',', '.'));
+
+                outputCsv.AppendLine(newLine);
             }
             Console.WriteLine($"Got {sum} elements correctly classified out of {count} which is {(float)sum * 100 / count}% good");
+
+            if (classificationRadioButton.Checked)
+                File.WriteAllText(System.IO.Directory.GetCurrentDirectory() + "\\ResultsClassification.csv", outputCsv.ToString());
+            else if (regressionRadioButton.Checked)
+                File.WriteAllText(System.IO.Directory.GetCurrentDirectory() + "\\ResultsRegression.csv", outputCsv.ToString());
+
+
         }
     }
 }
