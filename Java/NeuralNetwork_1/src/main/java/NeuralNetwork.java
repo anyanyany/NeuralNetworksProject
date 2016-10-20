@@ -45,7 +45,6 @@ public class NeuralNetwork {
 		String columns = "x,y,cls\n";
 		sb.append(columns);
 		
-		
 		NormalizationHelper norm = dataSet.getNormHelper();
 		int correct = 0, all = 0, inputVectorLength = csvReader.getColumnNames().size() - 1;
 		String[] line = new String[inputVectorLength];
@@ -76,6 +75,43 @@ public class NeuralNetwork {
 		}
 		
 		System.out.println("Final score: " + (correct * 100.0) / all + "%");
+		writer.append(sb.toString());
+		writer.flush();
+        writer.close();
+	}
+	
+public void getRegressionResults(ReadCSV csvReader, VersatileMLDataSet dataSet) {
+		
+		String csvFile = "/tmp/RegressionResults.csv";
+		FileWriter writer = new FileWriter(csvFile);
+		StringBuilder sb = new StringBuilder();
+		String columns = "x,y\n";
+		sb.append(columns);
+		
+		NormalizationHelper norm = dataSet.getNormHelper();
+		int inputVectorLength = csvReader.getColumnNames().size() - 1;
+		String[] line = new String[inputVectorLength];
+		double[] data = new double[inputVectorLength];
+		MLData output;
+
+		while (isTrained && csvReader.next()) {
+			for (int i = 0; i < inputVectorLength; i++) {
+				String value = csvReader.get(i);
+				line[i] = value;
+				data[i] = Double.parseDouble(value);
+				
+				sb.append(value);
+				sb.append(",");
+			}
+			norm.normalizeInputVector(line, data, true);
+			output = network.compute(new BasicMLData(data));
+
+			double predictedValue = Double.parseDouble(norm.denormalizeOutputVectorToString(output)[0]);
+			
+			sb.append(String.valueOf(predictedValue));
+			sb.append("\n");
+		}		
+		System.out.println("REGRESSION DONE");
 		writer.append(sb.toString());
 		writer.flush();
         writer.close();
