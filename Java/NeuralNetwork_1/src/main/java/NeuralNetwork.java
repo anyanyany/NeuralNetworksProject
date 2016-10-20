@@ -1,4 +1,5 @@
 import java.io.FileWriter;
+import java.io.IOException;
 
 import org.encog.ml.data.MLData;
 import org.encog.ml.data.basic.BasicMLData;
@@ -27,7 +28,7 @@ public class NeuralNetwork {
 			while (true) {
 				isTrained = true;
 				trainer.iteration();
-				if(trainer.getIteration() % 100 == 0)
+				if (trainer.getIteration() % 100 == 0)
 					System.out.println("Iteration: " + trainer.getIteration() + " Error -> " + trainer.getError());
 				if (trainer.getError() < targetError || --iterationsCount <= 0)
 					break;
@@ -37,26 +38,27 @@ public class NeuralNetwork {
 		}
 	}
 
-	public void getClassificationResults(ReadCSV csvReader, VersatileMLDataSet dataSet) {
-		
-		String csvFile = "/tmp/ClassificationResults.csv";
+	public void getClassificationResults(ReadCSV csvReader, VersatileMLDataSet dataSet, String resultsFilename)
+			throws IOException {
+
+		String csvFile = resultsFilename;
 		FileWriter writer = new FileWriter(csvFile);
 		StringBuilder sb = new StringBuilder();
 		String columns = "x,y,cls\n";
 		sb.append(columns);
-		
+
 		NormalizationHelper norm = dataSet.getNormHelper();
 		int correct = 0, all = 0, inputVectorLength = csvReader.getColumnNames().size() - 1;
-		String[] line = new String[inputVectorLength];
-		double[] data = new double[inputVectorLength];
+		String[] line = new String[inputVectorLength + 1];
+		double[] data = new double[inputVectorLength + 1];
 		MLData output;
 
 		while (isTrained && csvReader.next()) {
-			for (int i = 0; i < inputVectorLength; i++) {
+			for (int i = 0; i < line.length; i++) {
 				String value = csvReader.get(i);
 				line[i] = value;
 				data[i] = Double.parseDouble(value);
-				
+
 				sb.append(value);
 				sb.append(",");
 			}
@@ -66,40 +68,43 @@ public class NeuralNetwork {
 			double predictedValue = Double.parseDouble(norm.denormalizeOutputVectorToString(output)[0]);
 			double predictedClass = Math.round(predictedValue);
 			double correctClass = Double.parseDouble(csvReader.get(inputVectorLength));
-			// System.out.println("Got " + predictedClass + " for " + correctClass);
-			if (predictedClass == correctClass) correct++;
+			// System.out.println("Got " + predictedClass + " for " +
+			// correctClass);
+			if (predictedClass == correctClass)
+				correct++;
 			all++;
-			
+
 			sb.append(String.valueOf(predictedClass));
 			sb.append("\n");
 		}
-		
+
 		System.out.println("Final score: " + (correct * 100.0) / all + "%");
 		writer.append(sb.toString());
 		writer.flush();
-        writer.close();
+		writer.close();
 	}
-	
-public void getRegressionResults(ReadCSV csvReader, VersatileMLDataSet dataSet) {
-		
-		String csvFile = "/tmp/RegressionResults.csv";
+
+	public void getRegressionResults(ReadCSV csvReader, VersatileMLDataSet dataSet, String resultsFilename)
+			throws IOException {
+
+		String csvFile = resultsFilename;
 		FileWriter writer = new FileWriter(csvFile);
 		StringBuilder sb = new StringBuilder();
 		String columns = "x,y\n";
 		sb.append(columns);
-		
+
 		NormalizationHelper norm = dataSet.getNormHelper();
 		int inputVectorLength = csvReader.getColumnNames().size() - 1;
-		String[] line = new String[inputVectorLength];
-		double[] data = new double[inputVectorLength];
+		String[] line = new String[inputVectorLength + 1];
+		double[] data = new double[inputVectorLength + 1];
 		MLData output;
 
 		while (isTrained && csvReader.next()) {
-			for (int i = 0; i < inputVectorLength; i++) {
+			for (int i = 0; i < line.length; i++) {
 				String value = csvReader.get(i);
 				line[i] = value;
 				data[i] = Double.parseDouble(value);
-				
+
 				sb.append(value);
 				sb.append(",");
 			}
@@ -107,14 +112,14 @@ public void getRegressionResults(ReadCSV csvReader, VersatileMLDataSet dataSet) 
 			output = network.compute(new BasicMLData(data));
 
 			double predictedValue = Double.parseDouble(norm.denormalizeOutputVectorToString(output)[0]);
-			
+
 			sb.append(String.valueOf(predictedValue));
 			sb.append("\n");
-		}		
+		}
 		System.out.println("REGRESSION DONE");
 		writer.append(sb.toString());
 		writer.flush();
-        writer.close();
+		writer.close();
 	}
 
 }

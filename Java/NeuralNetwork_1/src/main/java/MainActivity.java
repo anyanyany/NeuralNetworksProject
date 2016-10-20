@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.IOException;
 
 import org.encog.engine.network.activation.ActivationTANH;
 import org.encog.ml.data.MLDataPair;
@@ -32,6 +33,22 @@ public class MainActivity {
 		return network;
 	}
 
+	private static BasicNetwork createNetwork2() {
+		boolean isBias = true;
+
+		BasicLayer[] layers = { new BasicLayer(new ActivationTANH(), isBias, 1),
+				new BasicLayer(new ActivationTANH(), isBias, 10), new BasicLayer(new ActivationTANH(), isBias, 5),
+				new BasicLayer(new ActivationTANH(), isBias, 1) };
+
+		BasicNetwork network = new BasicNetwork();
+		for (BasicLayer l : layers)
+			network.addLayer(l);
+		network.getStructure().finalizeStructure();
+		network.reset();
+
+		return network;
+	}
+
 	private static VersatileMLDataSet getDataSetForClassification(String filename) {
 		File file = new File(filename);
 		VersatileMLDataSet set = new VersatileMLDataSet(new CSVDataSource(file, true, CSVFormat.DECIMAL_POINT));
@@ -52,7 +69,7 @@ public class MainActivity {
 
 		return set;
 	}
-	
+
 	private static VersatileMLDataSet getDataSetForRegression(String filename) {
 		File file = new File(filename);
 		VersatileMLDataSet set = new VersatileMLDataSet(new CSVDataSource(file, true, CSVFormat.DECIMAL_POINT));
@@ -87,21 +104,37 @@ public class MainActivity {
 
 	public static void main(String[] args) {
 		int iterationsCount = 2000;
-		double learningRate = 0.05, momentum = 0.01, targetError = 0.025;
-		
+		double learningRate = 0.05, momentum = 0.01, targetError = 0.00025;
+
 		System.out.println("Starting classification!");
 		String trainingDataSetFilename = "/tmp/data.train.csv";
-		VersatileMLDataSet set = getDataSetForClassification(trainingDataSetFilename);		
+		String testingDataSetFilename = "/tmp/data.test.csv";
+		VersatileMLDataSet set = getDataSetForClassification(trainingDataSetFilename);
 		NeuralNetwork network = new NeuralNetwork(learningRate, momentum, createNetwork(), getNeuralDataSet(set));
 		network.trainNetwork(iterationsCount, targetError);
-		network.getClassificationResults(new ReadCSV(trainingDataSetFilename, true, CSVFormat.DECIMAL_POINT), set);
-		
+		try {
+			network.getClassificationResults(new ReadCSV(trainingDataSetFilename, true, CSVFormat.DECIMAL_POINT), set,
+					"/tmp/ClassificationResults.csv");
+			network.getClassificationResults(new ReadCSV(testingDataSetFilename, true, CSVFormat.DECIMAL_POINT), set,
+					"/tmp/ClassificationResults2.csv");
+		} catch (IOException e) {
+			System.err.println("Got exception: " + e.getMessage());
+		}
+
 		System.out.println("Starting regression!");
 		trainingDataSetFilename = "/tmp/data.xsq.train.csv";
-		set = getDataSetForRegression(trainingDataSetFilename);		
-		network = new NeuralNetwork(learningRate, momentum, createNetwork(), getNeuralDataSet(set));
+		testingDataSetFilename = "/tmp/data.xsq.test.csv";
+		set = getDataSetForRegression(trainingDataSetFilename);
+		network = new NeuralNetwork(learningRate, momentum, createNetwork2(), getNeuralDataSet(set));
 		network.trainNetwork(iterationsCount, targetError);
-		network.getRegressionResults(new ReadCSV(trainingDataSetFilename, true, CSVFormat.DECIMAL_POINT), set);		
+		try {
+			network.getRegressionResults(new ReadCSV(trainingDataSetFilename, true, CSVFormat.DECIMAL_POINT), set,
+					"/tmp/RegressionResults.csv");
+			network.getRegressionResults(new ReadCSV(testingDataSetFilename, true, CSVFormat.DECIMAL_POINT), set,
+					"/tmp/RegressionResults2.csv");
+		} catch (IOException e) {
+			System.err.println("Got exception: " + e.getMessage());
+		}
 	}
 
 }
