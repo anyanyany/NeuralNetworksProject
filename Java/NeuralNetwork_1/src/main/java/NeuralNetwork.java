@@ -1,3 +1,5 @@
+import java.io.FileWriter;
+
 import org.encog.ml.data.MLData;
 import org.encog.ml.data.basic.BasicMLData;
 import org.encog.ml.data.versatile.NormalizationHelper;
@@ -36,7 +38,14 @@ public class NeuralNetwork {
 	}
 
 	public void getClassificationResults(ReadCSV csvReader, VersatileMLDataSet dataSet) {
-		// TODO: Add results saving to CSV
+		
+		String csvFile = "/tmp/ClassificationResults.csv";
+		FileWriter writer = new FileWriter(csvFile);
+		StringBuilder sb = new StringBuilder();
+		String columns = "x,y,cls\n";
+		sb.append(columns);
+		
+		
 		NormalizationHelper norm = dataSet.getNormHelper();
 		int correct = 0, all = 0, inputVectorLength = csvReader.getColumnNames().size() - 1;
 		String[] line = new String[inputVectorLength];
@@ -48,6 +57,9 @@ public class NeuralNetwork {
 				String value = csvReader.get(i);
 				line[i] = value;
 				data[i] = Double.parseDouble(value);
+				
+				sb.append(value);
+				sb.append(",");
 			}
 			norm.normalizeInputVector(line, data, true);
 			output = network.compute(new BasicMLData(data));
@@ -58,9 +70,15 @@ public class NeuralNetwork {
 			// System.out.println("Got " + predictedClass + " for " + correctClass);
 			if (predictedClass == correctClass) correct++;
 			all++;
+			
+			sb.append(String.valueOf(predictedClass));
+			sb.append("\n");
 		}
 		
 		System.out.println("Final score: " + (correct * 100.0) / all + "%");
+		writer.append(sb.toString());
+		writer.flush();
+        writer.close();
 	}
 
 }
