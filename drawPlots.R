@@ -24,5 +24,9 @@ plot(dataTest$x,dataTest$y, col="red",xlim=c(-5,7), ylim=c(0,25),xlab="X", ylab=
 
 
 #Errors
-data <- read.csv(file="h:\\Windows7\\Desktop\\NeuralNetworksProject\\Project1\\NeuralNetworks\\bin\\Debug\\TrainingErrors.csv",head=TRUE,sep=",")
-plot(data$iterarion,data$error)
+data <- read.csv(file="C:\\Users\\Anna\\Downloads\\training_error_1.csv",head=TRUE,sep=",")
+plot(data$iteration,data$error,type="l",xlab="iteration", ylab="error",main="classification")
+
+
+data <- read.csv(file="C:\\Users\\Anna\\Downloads\\training_error_2.csv",head=TRUE,sep=",")
+plot(data$iteration,data$error,type="l",xlab="iteration", ylab="error",main="regression")
